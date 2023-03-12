@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Slf4j
@@ -13,20 +12,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    @NotNull
-    private int id;
-
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email cannot be blank")
-    private String email;
-
-    @NotBlank(message = "Login cannot be blank")
-    @Pattern(regexp = "^[^\\s]+$", message = "Login cannot contain spaces")
+    private long id;
     private String login;
-
-    @NotBlank(message = "Name cannot be blank")
     private String name;
-
-    @Past(message = "Birthday must be in the past")
+    private String email;
     private LocalDate birthday;
+
+
+    public String getName(){
+        if(name == null || name.isEmpty() || name.isBlank()) return login;
+        return name;
+    }
 }
