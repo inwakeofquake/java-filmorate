@@ -18,7 +18,7 @@ public class FilmRepository {
 
     public void save(Film film) {
         film.setId(getGeneratedId());
-        if (film.getName() == null || film.getName().isEmpty() || film.getName().isBlank()) {
+        if (film.getName() == null || film.getName().isEmpty()) {
             throw new RuntimeException("Film must have a name");
         }
         films.put(film.getId(),film);

@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repositories.UserRepository;
 import ru.yandex.practicum.filmorate.service.ValidateService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -15,10 +16,10 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    final ValidateService validateService;
+    private final ValidateService validateService;
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
     public UserController(ValidateService validateService) {
         this.validateService = new ValidateService();
@@ -32,7 +33,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    User saveUser(@RequestBody User user) {
+    User saveUser(@Valid @RequestBody User user) {
         log.info("Saving user: {} - Started", user);
         validateService.validateUser(user);
         repository.save(user);
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping()
-    User updateUser(@RequestBody User user) {
+    User updateUser(@Valid @RequestBody User user) {
         log.info("Updating user: {} - Started", user);
         validateService.validateUser(user);
         repository.update(user);

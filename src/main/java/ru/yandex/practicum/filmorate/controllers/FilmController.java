@@ -14,10 +14,10 @@ import java.util.List;
 @RequestMapping("/films")
 public class FilmController {
 
-    final ValidateService validateService;
+    private final ValidateService validateService;
 
     @Autowired
-    FilmRepository repository;
+    private FilmRepository repository;
 
     public FilmController(ValidateService validateService) {
         this.validateService = validateService;

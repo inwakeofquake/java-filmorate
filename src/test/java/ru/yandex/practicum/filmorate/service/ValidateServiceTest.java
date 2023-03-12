@@ -24,11 +24,6 @@ class ValidateServiceTest {
         assertThrows(RuntimeException.class, () -> validateService.validateUser(userWithEmptyLogin),
                 "validateUser() should throw a RuntimeException when the user's login is empty");
 
-        User userWithInvalidEmailFormat = new User(1,"testlogin","John Smith","john.test.com",
-                LocalDate.now().minusYears(24));
-        assertThrows(RuntimeException.class, () -> validateService.validateUser(userWithInvalidEmailFormat),
-                "validateUser() should throw a RuntimeException when the user's email has an invalid format");
-
         User userWithEmptyName = new User(1,"testlogin","","john@test.com",
                 LocalDate.now().minusYears(15));
         assertEquals(userWithEmptyName.getName(), userWithEmptyName.getLogin());
