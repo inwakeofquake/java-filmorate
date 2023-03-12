@@ -19,7 +19,7 @@ public class UserRepository {
 
     public void save(User user) {
         user.setId(getGeneratedId());
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         users.put(user.getId(),user);

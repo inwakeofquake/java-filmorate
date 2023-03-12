@@ -25,7 +25,7 @@ public class User {
     private LocalDate birthday;
 
     public String getName(){
-        if(name == null || name.isEmpty() || name.isBlank()) {
+        if(name == null || name.isBlank()) {
             return login;
         }
         return name;

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -11,7 +12,7 @@ public class ValidateService {
     private final LocalDate firstFilm = LocalDate.of(1895,12,28);
 
     public void validateUser(User user){
-        if(user.getLogin() == null || user.getLogin().isEmpty()) {
+        if(user.getLogin() == null || user.getLogin().isBlank()) {
             throw new RuntimeException("Invalid user login: null or empty");
         }
         if(user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
@@ -23,7 +24,7 @@ public class ValidateService {
     }
 
     public void validateFilm(Film film){
-        if(film.getName() == null || film.getName().isBlank() || film.getName().isEmpty()) {
+        if(film.getName() == null || film.getName().isBlank()) {
             throw new RuntimeException("Film name is null, blank or empty");
         }
         if(film.getId() < 0) {
