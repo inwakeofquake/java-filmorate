@@ -35,7 +35,7 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> getById(@PathVariable Long id) {
-        if(!repository.hasId(id)) {
+        if (!repository.hasId(id)) {
             throw new NoSuchIdException("No such ID");
         }
         log.info("Retrieving film by id: {}", id);
@@ -68,7 +68,7 @@ public class FilmController {
 
     @PutMapping("/{filmId}/like/{userId}")
     public ResponseEntity<Film> addLike(@PathVariable Long filmId, @PathVariable Long userId) {
-        if (!repository.hasId(filmId) || !userStorage.hasId(userId)){
+        if (!repository.hasId(filmId) || !userStorage.hasId(userId)) {
             throw new NoSuchIdException("No such ID");
         }
         log.info("User {} liked film {}", userId, filmId);
@@ -78,7 +78,7 @@ public class FilmController {
 
     @DeleteMapping("/{filmId}/like/{userId}")
     public void removeLike(@PathVariable Long filmId, @PathVariable Long userId) {
-        if (!repository.hasId(filmId) || !userStorage.hasId(userId)){
+        if (!repository.hasId(filmId) || !userStorage.hasId(userId)) {
             throw new NoSuchIdException("No such ID");
         }
         log.info("User {} removed like from film {}", userId, filmId);
