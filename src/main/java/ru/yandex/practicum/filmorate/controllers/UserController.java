@@ -59,7 +59,7 @@ public class UserController {
 
     @PutMapping("/{id}/friends/{friendId}")
     public ResponseEntity<String> addFriendship(@PathVariable Long id, @PathVariable Long friendId) {
-        if (!repository.hasId(id) || !repository.hasId(friendId)){
+        if (!repository.hasId(id) || !repository.hasId(friendId)) {
             throw new NoSuchIdException("No such ID");
         }
         userService.addFriendship(repository.getById(id), repository.getById(friendId));
@@ -68,7 +68,7 @@ public class UserController {
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public ResponseEntity<Void> removeFriendship(@PathVariable Long id, @PathVariable Long friendId) {
-        if (!repository.hasId(id) || !repository.hasId(friendId)){
+        if (!repository.hasId(id) || !repository.hasId(friendId)) {
             throw new NoSuchIdException("No such ID");
         }
         userService.removeFriendship(repository.getById(id), repository.getById(friendId));
@@ -77,7 +77,7 @@ public class UserController {
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public List<User> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        if (!repository.hasId(id) || !repository.hasId(otherId)){
+        if (!repository.hasId(id) || !repository.hasId(otherId)) {
             throw new NoSuchIdException("No such ID");
         }
         return userService.getMutualFriends(repository.getById(id), repository.getById(otherId));
@@ -85,7 +85,7 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     public List<User> getFriends(@PathVariable Long id) {
-        if (!repository.hasId(id)){
+        if (!repository.hasId(id)) {
             throw new NoSuchIdException("No such ID");
         }
         User user = repository.getById(id);
