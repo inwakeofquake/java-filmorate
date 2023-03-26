@@ -1,6 +1,7 @@
-package ru.yandex.practicum.filmorate.repositories;
+package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NoSuchIdException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -8,8 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class UserRepository {
-
+public class InMemoryUserStorage implements UserStorageInterface {
     private final Map<Long, User> users = new ConcurrentHashMap<>();
     private long generatorId = 0;
 
@@ -26,17 +26,27 @@ public class UserRepository {
     }
 
     public void update(User user) {
-        if(findById(user.getId()) == null) {
-            throw new RuntimeException("No user with such id");
+        if(getById(user.getId()) == null) {
+            throw new NoSuchIdException("No such user ID");
         }
+        for(long id:users.get(user.getId()).getFriendIds())
+            user.addFriendId(id);
         users.put(user.getId(),user);
-    }
-
-    public User findById(Long id) {
-        return users.get(id);
     }
 
     public ArrayList<User> getAll() {
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public boolean hasId(long id) {
+        return users.containsKey(id);
+    }
+
+    public User getById(Long id) {
+        if(users.containsKey(id)) {
+            return users.get(id);
+        }
+        return null;
     }
 }
