@@ -27,8 +27,8 @@ public class User {
     private LocalDate birthday;
     private Set<Long> friendIds = new HashSet<>();
 
-    public String getName(){
-        if(name == null || name.isBlank()) {
+    public String getName() {
+        if (name == null || name.isBlank()) {
             return login;
         }
         return name;
@@ -38,7 +38,7 @@ public class User {
         friendIds.add(friendId);
     }
 
-    public void removeFriendId(Long friendId){
+    public void removeFriendId(Long friendId) {
         friendIds.remove(friendId);
     }
 }

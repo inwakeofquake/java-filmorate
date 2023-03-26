@@ -27,7 +27,7 @@ public class Film {
     }
 
     public void removeLike(Long userId) {
-        if (this.likes.contains(userId) ) {
+        if (this.likes.contains(userId)) {
             this.likes.remove(userId);
         } else throw new NullPointerException("No such userId");
     }

@@ -82,7 +82,7 @@ public class FilmController {
             throw new NoSuchIdException("No such ID");
         }
         log.info("User {} removed like from film {}", userId, filmId);
-        filmService.removeLike(filmId,userId);
+        filmService.removeLike(filmId, userId);
     }
 
     @GetMapping("/popular")

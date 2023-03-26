@@ -37,7 +37,7 @@ public class FilmService {
         List<Film> allFilms = filmStorage.getAll();
         allFilms.sort(Comparator.comparingInt(film -> film.getLikes().size()));
         Collections.reverse(allFilms);
-        return allFilms.subList(0,Math.min(allFilms.size(), count));
+        return allFilms.subList(0, Math.min(allFilms.size(), count));
     }
 }
 

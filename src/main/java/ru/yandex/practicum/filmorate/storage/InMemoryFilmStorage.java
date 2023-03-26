@@ -23,14 +23,14 @@ public class InMemoryFilmStorage implements FilmStorageInterface {
         if (film.getName() == null || film.getName().isEmpty()) {
             throw new InvalidInputException("Film name cannot be null or empty");
         }
-        films.put(film.getId(),film);
+        films.put(film.getId(), film);
     }
 
     public void update(Film film) {
-        if(getById(film.getId()) == null) {
+        if (getById(film.getId()) == null) {
             throw new NoSuchIdException("No such film ID");
         }
-        films.put(film.getId(),film);
+        films.put(film.getId(), film);
     }
 
     public Film getById(Long id) {

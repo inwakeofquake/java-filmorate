@@ -22,16 +22,16 @@ public class InMemoryUserStorage implements UserStorageInterface {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
-        users.put(user.getId(),user);
+        users.put(user.getId(), user);
     }
 
     public void update(User user) {
-        if(getById(user.getId()) == null) {
+        if (getById(user.getId()) == null) {
             throw new NoSuchIdException("No such user ID");
         }
-        for(long id:users.get(user.getId()).getFriendIds())
+        for (long id : users.get(user.getId()).getFriendIds())
             user.addFriendId(id);
-        users.put(user.getId(),user);
+        users.put(user.getId(), user);
     }
 
     public ArrayList<User> getAll() {
@@ -44,7 +44,7 @@ public class InMemoryUserStorage implements UserStorageInterface {
     }
 
     public User getById(Long id) {
-        if(users.containsKey(id)) {
+        if (users.containsKey(id)) {
             return users.get(id);
         }
         return null;
