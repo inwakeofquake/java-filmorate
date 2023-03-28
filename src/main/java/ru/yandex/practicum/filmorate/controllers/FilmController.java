@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NoSuchIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.ValidateService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -24,22 +23,23 @@ public class FilmController {
 
     private final ValidateService validateService;
     private final FilmService filmService;
-    private final InMemoryFilmStorage repository;
-    private final InMemoryUserStorage userStorage;
+    private final UserService userService;
 
     @GetMapping()
     public List<Film> getAll() {
         log.info("Retrieving all films.");
-        return repository.getAll();
+        return filmService.getAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> getById(@PathVariable Long id) {
-        if (!repository.hasId(id)) {
+        log.info("Retrieving film by ID: {}", id);
+        if (!filmService.hasId(id)) {
+            log.warn("Failed to retrieve film due to bad ID");
             throw new NoSuchIdException("No such ID");
         }
-        log.info("Retrieving film by id: {}", id);
-        return ResponseEntity.ok(repository.getById(id));
+
+        return ResponseEntity.ok(filmService.getById(id));
     }
 
     @PostMapping
@@ -52,7 +52,7 @@ public class FilmController {
             log.warn("Validation error occurred while saving the film {}", film.getName());
             return ResponseEntity.badRequest().build();
         }
-        repository.save(film);
+        filmService.save(film);
         log.info("Film {} has been saved.", film.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(film);
     }
@@ -61,24 +61,27 @@ public class FilmController {
     Film updateFilm(@RequestBody Film film) {
         log.info("Updating film: {} - Started", film);
         validateService.validateFilm(film);
-        repository.update(film);
+        filmService.update(film);
         log.info("Saving updated film: {}", film);
         return film;
     }
 
     @PutMapping("/{filmId}/like/{userId}")
     public ResponseEntity<Film> addLike(@PathVariable Long filmId, @PathVariable Long userId) {
-        if (!repository.hasId(filmId) || !userStorage.hasId(userId)) {
+        log.info("User {} liked film {}", userId, filmId);
+        if (!filmService.hasId(filmId) || !userService.hasId(userId)) {
+            log.warn("Failed to add like: user ID {} or film ID {} not found", userId, filmId);
             throw new NoSuchIdException("No such ID");
         }
-        log.info("User {} liked film {}", userId, filmId);
+
         filmService.addLike(filmId, userId);
-        return ResponseEntity.ok(repository.getById(filmId));
+        return ResponseEntity.ok(filmService.getById(filmId));
     }
 
     @DeleteMapping("/{filmId}/like/{userId}")
     public void removeLike(@PathVariable Long filmId, @PathVariable Long userId) {
-        if (!repository.hasId(filmId) || !userStorage.hasId(userId)) {
+        if (!filmService.hasId(filmId) || !userService.hasId(userId)) {
+            log.warn("Failed to remove like of user {} from film {}: bad ID", userId, filmId);
             throw new NoSuchIdException("No such ID");
         }
         log.info("User {} removed like from film {}", userId, filmId);

@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private long id = 0;
+    private long id;
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Login must contain only letters, digits and underscores.")
     private String login;
     private String name;

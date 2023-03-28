@@ -39,5 +39,25 @@ public class FilmService {
         Collections.reverse(allFilms);
         return allFilms.subList(0, Math.min(allFilms.size(), count));
     }
+
+    public List<Film> getAll() {
+        return filmStorage.getAll();
+    }
+
+    public boolean hasId(Long id) {
+        return filmStorage.hasId(id);
+    }
+
+    public Film getById(Long id) {
+        return filmStorage.getById(id);
+    }
+
+    public void save(Film film) {
+        filmStorage.save(film);
+    }
+
+    public void update(Film film) {
+        filmStorage.update(film);
+    }
 }
 

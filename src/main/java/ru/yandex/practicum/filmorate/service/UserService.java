@@ -18,6 +18,10 @@ public class UserService {
 
     private final UserStorageInterface userStorage;
 
+    public void saveUser(User user) {
+        userStorage.save(user);
+    }
+
     public void addFriendship(User user1, User user2) {
         user1.addFriendId(user2.getId());
         user2.addFriendId(user1.getId());
@@ -54,5 +58,21 @@ public class UserService {
             }
         }
         return friendsList;
+    }
+
+    public List<User> getAll() {
+        return userStorage.getAll();
+    }
+
+    public User getById(Long id) {
+        return userStorage.getById(id);
+    }
+
+    public void update(User user) {
+        userStorage.update(user);
+    }
+
+    public boolean hasId(long id) {
+        return userStorage.hasId(id);
     }
 }
