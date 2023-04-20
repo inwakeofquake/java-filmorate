@@ -9,6 +9,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Data
@@ -23,11 +25,20 @@ public class User {
     @Email
     private String email;
     private LocalDate birthday;
+    private Set<Long> friendIds = new HashSet<>();
 
-    public String getName(){
-        if(name == null || name.isBlank()) {
+    public String getName() {
+        if (name == null || name.isBlank()) {
             return login;
         }
         return name;
+    }
+
+    public void addFriendId(Long friendId) {
+        friendIds.add(friendId);
+    }
+
+    public void removeFriendId(Long friendId) {
+        friendIds.remove(friendId);
     }
 }
