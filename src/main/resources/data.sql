@@ -1,4 +1,3 @@
-
 INSERT INTO genres (name) values ('Комедия');
 INSERT INTO genres (name) values ('Драма');
 INSERT INTO genres (name) values ('Мультфильм');

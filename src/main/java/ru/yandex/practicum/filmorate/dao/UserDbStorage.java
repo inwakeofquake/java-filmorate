@@ -1,7 +1,6 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -11,10 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Qualifier("userDbStorage")
 public class UserDbStorage implements UserStorageInterface {
     private final JdbcTemplate jdbcTemplate;
-    private long generatorId;
 
     private final RowMapper<User> userRowMapper = (resultSet, rowNum) -> {
         User user = new User();
@@ -26,18 +23,9 @@ public class UserDbStorage implements UserStorageInterface {
         return user;
     };
 
-    private final RowMapper<User> userFriendsRowMapper = (resultSet, rowNum) -> {
-        return getById(resultSet.getLong("friend_id"));
-    };
-
     @Autowired
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @Override
-    public long getGeneratedId() {
-        return ++generatorId;
     }
 
     @Override
@@ -73,33 +61,6 @@ public class UserDbStorage implements UserStorageInterface {
     public boolean hasId(long id) {
         String sql = "SELECT COUNT(*) FROM users WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
-    }
-
-    @Override
-    public List<User> getFriendsById(long id) {
-        String sql = "SELECT * FROM user_friends WHERE user_id = ?";
-        return jdbcTemplate.query(sql, userFriendsRowMapper, id);
-    }
-
-    @Override
-    public List<Long> getFriendsIdsById(long id) {
-        List<Long> result = new ArrayList<>();
-        for (User user : getFriendsById(id)) {
-            result.add(user.getId());
-        }
-        return result;
-    }
-
-    @Override
-    public void addFriend(User user, User friend) {
-        String sql = "INSERT INTO user_friends (user_id, friend_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, user.getId(), friend.getId());
-    }
-
-    @Override
-    public void removeFriend(User user, User exFriend) {
-        String sql = "DELETE FROM user_friends WHERE user_id = ? AND friend_id = ?";
-        jdbcTemplate.update(sql, user.getId(), exFriend.getId());
     }
 }
 

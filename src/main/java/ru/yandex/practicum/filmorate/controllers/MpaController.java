@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.exception.NoSuchIdException;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.MpaService;
 
 import java.util.List;
 
@@ -19,22 +18,17 @@ import java.util.List;
 @RequestMapping("mpa")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class MpaController {
-    private final FilmService filmService;
+    private final MpaService mpaService;
 
     @GetMapping()
     public List<Mpa> getAll() {
         log.info("Retrieving all MPA ratings.");
-        return filmService.getAllMpas();
+        return mpaService.getAllMpas();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Mpa> getById(@PathVariable Long id) {
         log.info("Retrieving MPA rating by ID: {}", id);
-        if (!filmService.hasMpaId(id)) {
-            log.warn("Failed to retrieve MPA rating due to bad ID");
-            throw new NoSuchIdException("No such ID");
-        }
-
-        return ResponseEntity.ok(filmService.getMpaId(id));
+        return ResponseEntity.ok(mpaService.getMpaId(id));
     }
 }

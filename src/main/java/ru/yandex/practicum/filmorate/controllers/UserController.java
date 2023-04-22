@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.service.ValidateService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class UserController {
 
-    private final ValidateService validateService;
     private final UserService userService;
 
     @GetMapping()
@@ -36,18 +34,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> saveUser(@RequestBody @Valid User user) {
         log.info("Saving user: {} - Started", user);
-        validateService.validateUser(user);
         User savedUser = userService.saveUser(user);
         log.info("Saving user: {} - Finished", user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PutMapping()
-    User updateUser(@Valid @RequestBody User user) {
+    User updateUser(@RequestBody @Valid User user) {
         log.info("Updating user: {} - Started", user);
-        validateService.validateUser(user);
         User savedUser = userService.update(user);
         log.info("Saving updated user: {}", savedUser);
         return savedUser;

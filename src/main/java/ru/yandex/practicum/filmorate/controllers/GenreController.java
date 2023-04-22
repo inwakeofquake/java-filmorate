@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.exception.NoSuchIdException;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.GenreService;
 
-import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -20,22 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class GenreController {
 
-    private final FilmService filmService;
+    private final GenreService genreService;
 
     @GetMapping()
-    public List<Genre> getAll() {
+    public Set<Genre> getAll() {
         log.info("Retrieving all genres.");
-        return filmService.getAllGenres();
+        return genreService.getAllGenres();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Genre> getById(@PathVariable Long id) {
         log.info("Retrieving genre by ID: {}", id);
-        if (!filmService.hasGenreId(id)) {
-            log.warn("Failed to retrieve film due to bad ID");
-            throw new NoSuchIdException("No such ID");
-        }
-
-        return ResponseEntity.ok(filmService.getGenreId(id));
+        return ResponseEntity.ok(genreService.getGenreId(id));
     }
 }

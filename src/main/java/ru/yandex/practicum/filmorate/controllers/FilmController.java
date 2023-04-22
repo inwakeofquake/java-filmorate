@@ -8,9 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.service.ValidateService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -19,9 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class FilmController {
 
-    private final ValidateService validateService;
     private final FilmService filmService;
-    private final UserService userService;
 
     @GetMapping()
     public List<Film> getAll() {
@@ -37,18 +34,16 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Film> saveFilm(@RequestBody Film film) {
+    public ResponseEntity<Film> saveFilm(@RequestBody @Valid Film film) {
         log.info("Saving film {}", film.getName());
-        validateService.validateFilm(film);
         Film savedFilm = filmService.save(film);
         log.info("Film {} has been saved.", savedFilm.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFilm);
     }
 
     @PutMapping()
-    Film updateFilm(@RequestBody Film film) {
+    Film updateFilm(@RequestBody @Valid Film film) {
         log.info("Updating film: {} - Started", film);
-        validateService.validateFilm(film);
         Film savedFilm = filmService.update(film);
         log.info("Saving updated film: {}", savedFilm);
         return savedFilm;

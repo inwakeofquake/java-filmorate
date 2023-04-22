@@ -3,11 +3,11 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dao.FriendsDbStorageInterface;
+import ru.yandex.practicum.filmorate.dao.UserStorageInterface;
 import ru.yandex.practicum.filmorate.exception.NoSuchIdException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorageInterface;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,8 +19,8 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class UserService {
 
-    @Qualifier("userDbStorage")
     private final UserStorageInterface userStorage;
+    private final FriendsDbStorageInterface friendsDbStorage;
 
     public User saveUser(User user) {
         return userStorage.save(user);
@@ -31,7 +31,7 @@ public class UserService {
             log.warn("Failed to add friendship due to bad ID");
             throw new NoSuchIdException("No such ID");
         }
-        userStorage.addFriend(user1, user2);
+        friendsDbStorage.addFriend(user1, user2);
     }
 
     public void removeFriendship(User user1, User user2) {
@@ -39,7 +39,7 @@ public class UserService {
             log.warn("Failed to remove user from friends due to bad ID");
             throw new NoSuchIdException("No such ID");
         }
-        userStorage.removeFriend(user1, user2);
+        friendsDbStorage.removeFriend(user1, user2);
     }
 
     public List<User> getFriends(User user) {
@@ -47,7 +47,7 @@ public class UserService {
             log.warn("Failed to retrieve friends of user due to bad ID");
             throw new NoSuchIdException("No such ID");
         }
-        return userStorage.getFriendsById(user.getId());
+        return friendsDbStorage.getFriendsById(user.getId());
     }
 
     public List<User> getMutualFriends(User user1, User user2) {
@@ -55,8 +55,8 @@ public class UserService {
             log.warn("Failed to retrieve mutual friends of users due to bad ID");
             throw new NoSuchIdException("No such ID");
         }
-        Set<Long> mutual = new HashSet<>(userStorage.getFriendsIdsById(user1.getId()));
-        mutual.retainAll(userStorage.getFriendsIdsById(user2.getId()));
+        Set<Long> mutual = new HashSet<>(friendsDbStorage.getFriendsIdsById(user1.getId()));
+        mutual.retainAll(friendsDbStorage.getFriendsIdsById(user2.getId()));
         List<User> friendsList = new ArrayList<>();
         for (Long friendId : mutual) {
             User friend = userStorage.getById(friendId);
