@@ -1,19 +1,19 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.dao;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
 
 public interface FilmStorageInterface {
-    long getGeneratedId();
 
-    void save(Film film);
+    Film save(Film film);
 
-    void update(Film film);
+    Film update(Film film);
 
     Film getById(Long id);
 
     ArrayList<Film> getAll();
 
-    boolean hasId(long id);
+    boolean hasId(Long id);
+
 }
